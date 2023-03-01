@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Home from './Home';
+import Products from './Products';
 import Login from './Login';
 import { Link, Routes, Route } from 'react-router-dom';
 
 
 const App = ()=> {
   const [auth, setAuth] = useState({});
+  const [products, setProducts] = useState([]);
+
+  //TODO - move fetch calls somewhere else
   const attemptLogin = ()=> {
     const token = window.localStorage.getItem('token');
     if(token){
@@ -25,6 +29,14 @@ const App = ()=> {
 
   useEffect(()=> {
     attemptLogin();
+  }, []);
+
+  useEffect(()=> {
+    fetch('/api/products')
+      .then(response => response.json())
+      .then( products => {
+        setProducts(products);
+      })
   }, []);
 
   const logout = ()=> {
@@ -71,8 +83,10 @@ const App = ()=> {
             </>
           )
         }
+        <Link to='/products'>Products ({ products.length })</Link>
       </nav>
       <Routes>
+        <Route path='/Products' element= { <Products products={ products }/> } />
         {
           auth.id ? (
             <>
