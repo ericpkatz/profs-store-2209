@@ -10,8 +10,18 @@ const createProduct = async({ name }) => {
   return response.rows[0];
 }
 
+const getProducts = async() => {
+  const SQL = `
+    SELECT * 
+    FROM products
+  `;
+  const response = await client.query(SQL);
+  return response.rows;
+}
+
 
 module.exports = {
   createProduct,
+  getProducts
 };
 

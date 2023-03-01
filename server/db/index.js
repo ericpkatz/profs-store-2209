@@ -6,7 +6,8 @@ const {
 } = require('./User');
 
 const {
-  createProduct
+  createProduct,
+  getProducts
 } = require('./Product');
 
 const syncTables = async()=> {
@@ -60,5 +61,6 @@ module.exports = {
   createUser,
   authenticate,
   getUserByToken,
+  getProducts,
   client
 };
