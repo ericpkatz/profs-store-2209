@@ -15,3 +15,12 @@ nav {
   display: flex;
   justify-content: space-around;
 }
+
+nav a {
+  padding: 0.25rem;
+  border-radius: 0.2rem;
+}
+nav a.selected {
+  background-color: dodgerBlue;
+  color: cornSilk;
+}

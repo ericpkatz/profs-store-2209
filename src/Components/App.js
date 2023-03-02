@@ -2,13 +2,48 @@ import React, { useEffect, useState } from 'react';
 import Home from './Home';
 import Products from './Products';
 import Login from './Login';
-import { Link, Routes, Route } from 'react-router-dom';
+import Cart from './Cart';
+import { Link, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 
 
 const App = ()=> {
   const [auth, setAuth] = useState({});
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState({ line_items: []});
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const addToCart = (product)=> {
+    const token = window.localStorage.getItem('token');
+    fetch(
+      '/api/cart/add',
+      {
+        method: 'POST',
+        headers: {
+          'authorization': token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ product_id: product.id })
+      }
+    )
+    .then(()=> fetchCart());
+  };
+
+  const fetchCart = ()=> {
+    const token = window.localStorage.getItem('token');
+    fetch(
+      '/api/cart/',
+      {
+        method: 'GET',
+        headers: {
+          'authorization': token 
+        }
+      }
+    )
+    .then( response => response.json())
+    .then( cart => setCart(cart));
+  };
+
 
   //TODO - move fetch calls somewhere else
   const attemptLogin = ()=> {
@@ -34,7 +69,7 @@ const App = ()=> {
 
   useEffect(()=> {
     if(auth.id){
-    const token = window.localStorage.getItem('token');
+      const token = window.localStorage.getItem('token');
       fetch(
         '/api/cart/',
         {
@@ -78,6 +113,7 @@ const App = ()=> {
       if(data.token){
         window.localStorage.setItem('token', data.token);
         attemptLogin();
+        navigate('/');
       }
       else {
         console.log(data);
@@ -92,8 +128,10 @@ const App = ()=> {
         {
           auth.id ? (
             <>
-              <Link to='/'>Home</Link>
-              <Link to='/cart'>Cart ({ cart.line_items.length})</Link>
+              <Link className={ location.pathname === '/' ? 'selected': ''}  to='/'>Home</Link>
+              <Link className={ location.pathname === '/cart' ? 'selected': ''} to='/cart'>Cart ({ cart.line_items.reduce((acc, line_item)=> {
+                return acc += line_item.quantity
+              }, 0)})</Link>
               <button onClick={ logout }>Logout { auth.username }</button>
             </>
           ) : (
@@ -102,14 +140,15 @@ const App = ()=> {
             </>
           )
         }
-        <Link to='/products'>Products ({ products.length })</Link>
+        <Link to='/products' className={ location.pathname === '/products' ? 'selected': ''} >Products ({ products.length })</Link>
       </nav>
       <Routes>
-        <Route path='/Products' element= { <Products products={ products }/> } />
+        <Route path='/Products' element= { <Products products={ products } auth={ auth } addToCart={ addToCart } /> } />
         {
           auth.id ? (
             <>
             <Route path='/' element= { <Home auth={ auth }/> } />
+            <Route path='/cart' element= { <Cart cart={ cart }/> } />
             </>
 
           ): (

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Products = ({ products })=> {
+const Products = ({ auth, products, addToCart })=> {
   return (
     <ul>
       {
@@ -8,6 +8,7 @@ const Products = ({ products })=> {
           return (
             <li key={ product.id }>
               { product.name }
+            { auth.id ? <button onClick={()=> addToCart(product)}>+</button> : null }
             </li>
           );
         })

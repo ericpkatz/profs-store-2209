@@ -71,6 +71,9 @@ const syncAndSeed = async()=> {
     }),
     createProduct({
       name: 'bar'
+    }),
+    createProduct({
+      name: 'bazz'
     })
   ]);
   console.log('--- seeded products ---');
@@ -87,6 +90,8 @@ const syncAndSeed = async()=> {
   await addProductToCart({ product_id: foo.id, user_id: moe.id });
   await addProductToCart({ product_id: foo.id, user_id: moe.id });
   await addProductToCart({ product_id: bar.id, user_id: moe.id });
+  await addProductToCart({ product_id: bar.id, user_id: lucy.id });
+  await addProductToCart({ product_id: bar.id, user_id: lucy.id });
 
 };
 
@@ -98,5 +103,6 @@ module.exports = {
   getUserByToken,
   getProducts,
   getCartWithLineItems,
+  addProductToCart,
   client
 };

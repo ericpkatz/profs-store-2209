@@ -37,7 +37,6 @@ const authenticate = async({ username, password }) => {
     WHERE username = $1 and password = $2
   `;
   const response = await client.query(SQL, [ username, password]);
-  console.log(response);
   if(!response.rows.length){
     const error = Error('not authorized');
     error.status = 401;
