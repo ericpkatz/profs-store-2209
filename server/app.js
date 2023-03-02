@@ -10,6 +10,7 @@ app.get('/', (req, res)=> res.sendFile(path.join(__dirname, '../static/index.htm
 
 app.use('/api/auth', require('./api/auth'));
 app.use('/api/products', require('./api/products'));
+app.use('/api/cart', require('./api/cart'));
 
 app.use((err, req, res, next)=> {
   console.log(err);

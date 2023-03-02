@@ -84,6 +84,9 @@ const syncAndSeed = async()=> {
   cart = await getCartWithLineItems(moe.id);
   await createOrder(moe.id);
   console.log(await getCartWithLineItems(moe.id));
+  await addProductToCart({ product_id: foo.id, user_id: moe.id });
+  await addProductToCart({ product_id: foo.id, user_id: moe.id });
+  await addProductToCart({ product_id: bar.id, user_id: moe.id });
 
 };
 
@@ -94,5 +97,6 @@ module.exports = {
   authenticate,
   getUserByToken,
   getProducts,
+  getCartWithLineItems,
   client
 };

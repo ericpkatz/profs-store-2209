@@ -8,6 +8,7 @@ import { Link, Routes, Route } from 'react-router-dom';
 const App = ()=> {
   const [auth, setAuth] = useState({});
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState({ line_items: []});
 
   //TODO - move fetch calls somewhere else
   const attemptLogin = ()=> {
@@ -30,6 +31,23 @@ const App = ()=> {
   useEffect(()=> {
     attemptLogin();
   }, []);
+
+  useEffect(()=> {
+    if(auth.id){
+    const token = window.localStorage.getItem('token');
+      fetch(
+        '/api/cart/',
+        {
+          method: 'GET',
+          headers: {
+            'authorization': token 
+          }
+        }
+      )
+      .then( response => response.json())
+      .then( cart => setCart(cart));
+    }
+  }, [auth]);
 
   useEffect(()=> {
     fetch('/api/products')
@@ -75,6 +93,7 @@ const App = ()=> {
           auth.id ? (
             <>
               <Link to='/'>Home</Link>
+              <Link to='/cart'>Cart ({ cart.line_items.length})</Link>
               <button onClick={ logout }>Logout { auth.username }</button>
             </>
           ) : (
