@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Home from './Home';
 import Products from './Products';
+import Product from './Product';
 import Login from './Login';
 import Cart from './Cart';
 import { Link, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
@@ -143,7 +144,8 @@ const App = ()=> {
         <Link to='/products' className={ location.pathname === '/products' ? 'selected': ''} >Products ({ products.length })</Link>
       </nav>
       <Routes>
-        <Route path='/Products' element= { <Products products={ products } auth={ auth } addToCart={ addToCart } /> } />
+        <Route path='/products' element= { <Products products={ products } auth={ auth } addToCart={ addToCart } /> } />
+        <Route path='/products/:id' element={ <Product products={ products }/> } />
         {
           auth.id ? (
             <>

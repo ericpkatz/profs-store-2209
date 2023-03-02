@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Products = ({ auth, products, addToCart })=> {
   return (
@@ -7,7 +8,7 @@ const Products = ({ auth, products, addToCart })=> {
         products.map( product => {
           return (
             <li key={ product.id }>
-              { product.name }
+              <Link to={`/products/${product.id}`}>{ product.name }</Link>
             { auth.id ? <button onClick={()=> addToCart(product)}>+</button> : null }
             </li>
           );
